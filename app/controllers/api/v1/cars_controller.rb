@@ -1,52 +1,48 @@
 class Api::V1::CarsController < ApplicationController
-  before_action :set_api_v1_car, only: %i[show update destroy]
-
-  # GET /api/v1/cars
   def index
-    @api_v1_cars = Api::V1::Car.all
-
-    render json: @api_v1_cars
+    render json: { cars: Car.all }, status: :ok
   end
 
-  # GET /api/v1/cars/1
   def show
-    render json: @api_v1_car
+    @car = Car.find(params[:id])
+    render json: { car: @car }, status: :ok
   end
 
-  # POST /api/v1/cars
   def create
-    @api_v1_car = Api::V1::Car.new(api_v1_car_params)
-
-    if @api_v1_car.save
-      render json: @api_v1_car, status: :created, location: @api_v1_car
+    @car = Car.new(car_params)
+    if @car.save
+      render json: { success: 'The car has been created successfully.' }, status: :created
     else
-      render json: @api_v1_car.errors, status: :unprocessable_entity
+      render json: { error: 'There was an error, please try again!' }, status: :internal_server_error
     end
   end
 
-  # PATCH/PUT /api/v1/cars/1
-  def update
-    if @api_v1_car.update(api_v1_car_params)
-      render json: @api_v1_car
+  def delete
+    @car = Car.find(params[:id])
+    if @car.destroy!
+      render json: { success: 'The car has been deleted successfully' }, status: :ok
     else
-      render json: @api_v1_car.errors, status: :unprocessable_entity
+      render json: { error: 'There was an error, please try again!' }, status: :internal_server_error
     end
   end
 
-  # DELETE /api/v1/cars/1
-  def destroy
-    @api_v1_car.destroy
+  def user_cars
+    @cars = User.find(params[:user_id]).cars
+    render json: { cars: @cars }, status: :ok
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_api_v1_car
-    @api_v1_car = Api::V1::Car.find(params[:id])
+  def car_params
+    params.require(:car).permit(:user_id, :model, :make, :picture, :price)
   end
 
-  # Only allow a list of trusted parameters through.
-  def api_v1_car_params
-    params.require(:api_v1_car).permit(:name, :description, :photo, :price, :model, :user_id)
+  def authenticate_user!
+    return if user_signed_in?
+
+    render json: {
+      code: 401,
+      message: 'Unauthorized access'
+    }, status: :unauthorized
   end
 end
