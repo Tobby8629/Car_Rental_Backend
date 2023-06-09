@@ -1,10 +1,9 @@
-class UsersController < ApplicationController
+class Api::V1::UsersController < ApplicationController
   def register
     if User.find_by(username: params[:username].downcase)
-      render json: { error: 'Username already exists! please choose another one.' }, status: :not_acceptable
+      render json: { error: 'Username already exists! Please choose another one.' }, status: :not_acceptable
     else
-      @user = User.new(user_params)
-      @user.username = @user.username.downcase
+      @user = User.new(username: params[:username].downcase)
       if @user.save
         render json: { user: @user, logged_in: true }, status: :created
       else
@@ -20,11 +19,5 @@ class UsersController < ApplicationController
     else
       render json: { error: 'Username is invalid.' }, status: :not_acceptable
     end
-  end
-
-  private
-
-  def user_params
-    params.permit(:username, :password)
   end
 end
