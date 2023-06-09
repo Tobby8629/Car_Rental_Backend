@@ -1,14 +1,21 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      resources :cars
-      resources :users
+      get '/register/:username', to: 'api/v1/users#register'
+      get '/login/:username', to: 'users#login'
+
+      resources :cars, only: [:index, :create, :destroy, :show] do
+        member do
+          delete :delete
+        end
+        collection do
+          get :user_cars
+        end
+      end
+
+      resources :users, only: [:index, :create] do
+        resources :reservations, only: [:index, :create, :destroy, :show]
+      end
     end
   end
-  resources :cars
-  resources :users
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
 end
