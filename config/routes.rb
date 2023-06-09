@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :cars
       resources :users
+      resources :reservations, only: %i[index create show update destroy]
     end
   end
   resources :cars
