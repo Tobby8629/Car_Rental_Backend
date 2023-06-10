@@ -3,7 +3,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       get '/register/:username', to: 'api/v1/users#register'
       get '/login/:username', to: 'users#login'
-
+      
       resources :cars, only: [:index, :create, :destroy, :show] do
         member do
           delete :delete
@@ -14,7 +14,7 @@ Rails.application.routes.draw do
       end
 
       resources :users, only: [:index, :create] do
-        resources :reservations, only: [:index, :create, :destroy, :show]
+        resources :reservations, only: %i[index create show update destroy]
       end
     end
   end
