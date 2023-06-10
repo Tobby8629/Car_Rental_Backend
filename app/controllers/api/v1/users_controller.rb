@@ -1,52 +1,23 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :set_api_v1_user, only: %i[show update destroy]
-
-  # GET /api/v1/users
-  def index
-    @api_v1_users = Api::V1::User.all
-
-    render json: @api_v1_users
-  end
-
-  # GET /api/v1/users/1
-  def show
-    render json: @api_v1_user
-  end
-
-  # POST /api/v1/users
-  def create
-    @api_v1_user = Api::V1::User.new(api_v1_user_params)
-
-    if @api_v1_user.save
-      render json: @api_v1_user, status: :created, location: @api_v1_user
+  def register
+    if User.find_by(username: params[:username].downcase)
+      render json: { error: 'Username already exists! Please choose another one.' }, status: :not_acceptable
     else
-      render json: @api_v1_user.errors, status: :unprocessable_entity
+      @user = User.new(username: params[:username].downcase)
+      if @user.save
+        render json: { user: @user, logged_in: true }, status: :created
+      else
+        render json: { error: 'There was an error, please try again!' }, status: :internal_server_error
+      end
     end
   end
 
-  # PATCH/PUT /api/v1/users/1
-  def update
-    if @api_v1_user.update(api_v1_user_params)
-      render json: @api_v1_user
+  def login
+    @user = User.find_by(username: params[:username].downcase)
+    if @user
+      render json: { user: @user, logged_in: true }, status: :ok
     else
-      render json: @api_v1_user.errors, status: :unprocessable_entity
+      render json: { error: 'Username is invalid.' }, status: :not_acceptable
     end
-  end
-
-  # DELETE /api/v1/users/1
-  def destroy
-    @api_v1_user.destroy
-  end
-
-  private
-
-  # Use callbacks to share common setup or constraints between actions.
-  def set_api_v1_user
-    @api_v1_user = Api::V1::User.find(params[:id])
-  end
-
-  # Only allow a list of trusted parameters through.
-  def api_v1_user_params
-    params.require(:api_v1_user).permit(:username, :password_digest)
   end
 end
