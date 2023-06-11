@@ -1,23 +1,27 @@
 class Api::V1::UsersController < ApplicationController
-  def register
-    if User.find_by(username: params[:username].downcase)
-      render json: { error: 'Username already exists! Please choose another one.' }, status: :not_acceptable
+  skip_before_action :authenticate_request, only: %i[login create]
+  def create
+    @user = User.new(user_params)
+    if @user.save
+      render json: @user, status: :created
     else
-      @user = User.new(username: params[:username].downcase)
-      if @user.save
-        render json: { user: @user, logged_in: true }, status: :created
-      else
-        render json: { error: 'There was an error, please try again!' }, status: :internal_server_error
-      end
+      render json: @user.errors, status: :unprocessable_entity
     end
   end
 
   def login
-    @user = User.find_by(username: params[:username].downcase)
+    @user = User.find_by(username: params[:username])
     if @user
-      render json: { user: @user, logged_in: true }, status: :ok
+      token = jwt_encode({ user_id: @user.id })
+      render json: { token:, user: @user.username }
     else
-      render json: { error: 'Username is invalid.' }, status: :not_acceptable
+      render json: { error: 'Invalid username' }, status: :unauthorized
     end
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit(:username)
   end
 end
