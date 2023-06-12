@@ -1,23 +1,34 @@
 class Api::V1::CarsController < ApplicationController
   def index
-    render json: { cars: Car.all }, status: :ok
+    @cars = Car.all
+    render json: CarsRepresenter.new(@cars).as_json, status: :ok
   end
 
   def show
     @car = Car.find(params[:id])
-    render json: { car: @car }, status: :ok
+    render json: CarRepresenter.new(@car).as_json, status: :ok
   end
 
   def create
-    @car = Car.new(car_params)
+    @car = Car.new(car_params.merge(user: @current_user))
     if @car.save
-      render json: { success: 'The car has been created successfully.' }, status: :created
+      render json: CarRepresenter.new(@car).as_json, status: :created
     else
       render json: { error: 'There was an error, please try again!' }, status: :internal_server_error
     end
   end
 
-  def delete
+  # PUT /cars/:id
+  def update
+    @car.update(car_params)
+    if @car.save
+      render json: CarRepresenter.new(@car).as_json, status: :created
+    else
+      render json: @car.errors, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
     @car = Car.find(params[:id])
     if @car.destroy!
       render json: { success: 'The car has been deleted successfully' }, status: :ok
@@ -34,15 +45,6 @@ class Api::V1::CarsController < ApplicationController
   private
 
   def car_params
-    params.require(:car).permit(:user_id, :model, :make, :picture, :price)
-  end
-
-  def authenticate_user!
-    return if user_signed_in?
-
-    render json: {
-      code: 401,
-      message: 'Unauthorized access'
-    }, status: :unauthorized
+    params.require(:car).permit(:name, :description, :photo, :price, :model)
   end
 end
