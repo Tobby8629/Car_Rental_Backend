@@ -1,0 +1,18 @@
+databases:
+  - name: Car_Rental_Backend
+    databaseName: Car_Rental_Backend
+    user: Car_Rental_Backend
+
+services:
+  - type: web
+    name: Car_Rental_Backend
+    runtime: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: Car_Rental_Backend
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
