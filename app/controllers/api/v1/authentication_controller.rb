@@ -7,15 +7,12 @@ module Api
       rescue_from AuthenticateError, with: :handle_unauthenticated
 
       def create
-        user = User.new(username: params.require(:username))
-      
-        if user.save
-          render json: UserRepresenter.new(user).as_json, status: :created
+        if user
+          render json: UserRepresenter.new(user).as_json, status: :ok
         else
-          render json: { error: user.errors.full_messages.join(', ') }, status: :unprocessable_entity
+          render json: { error: 'No such user; check the submitted username' }, status: :unauthorized
         end
       end
-      
 
       private
 

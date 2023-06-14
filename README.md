@@ -148,8 +148,8 @@ Example command:
 
 👤 **Uchechi Nwaka**
 
-- GitHub: [![uchexm](https://img.shields.io/badge/-uchexm-white?logo=GitHub&logoColor=181717&style=plastic)](https://github.com/demix007)
-- Twitter: [![nwakauc](https://img.shields.io/badge/-nwakauc-blue?logo=Twitter&logoColor=skyBlue&style=plastic)](https://twitter.com/nwakauc)
+- GitHub: [![Uchexm](https://img.shields.io/badge/-uchexm-white?logo=GitHub&logoColor=181717&style=plastic)](https://github.com/demix007)
+- Twitter: [![Nwakauc](https://img.shields.io/badge/-nwakauc-blue?logo=Twitter&logoColor=skyBlue&style=plastic)](https://twitter.com/nwakauc)
 - LinkedIn: [![Uchechi Nwaka](https://img.shields.io/badge/-nwakauc-white?logo=LinkedIn&logoColor=181717&style=plastic)](https://linkedin.com/in/nwakauc)
 
 👤 **Alex Osoro Ogeto**
@@ -161,7 +161,7 @@ Example command:
 👤 **Samuel Tobby**
 
 - GitHub: [![Tobby8629](https://img.shields.io/badge/-Tobby8629-white?logo=GitHub&logoColor=181717&style=plastic)](https://github.com/Tobby8629)
-- LinkedIn: [![Tobby8629](https://img.shields.io/badge/-Tobby8629-white?logo=LinkedIn&logoColor=181717&style=plastic)](https://www.linkedin.com/in/samuel-popoola-tobby/)
+- LinkedIn: [![Tobby](https://img.shields.io/badge/-Tobby8629-white?logo=LinkedIn&logoColor=181717&style=plastic)](https://www.linkedin.com/in/samuel-popoola-tobby/)
 - Twitter:[![Tobby_samuels](https://img.shields.io/badge/-Tobby_samuels-blue?logo=Twitter&logoColor=skyBlue&style=plastic)](https://twitter.com/Tobby_samuels)
 
 👤 **Tekhlay Birhane**
