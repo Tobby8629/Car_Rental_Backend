@@ -12,7 +12,7 @@ module Api
 
       # POST /reservations
       def create
-        @reservation = @current_user.reservations.new(reservation_params)
+        @reservation = User.find(params[:user_id]).reservations.new(reservation_params)
         if @reservation.save
           render json: ReservationRepresenter.new(@reservation).as_json, status: :created
         else
