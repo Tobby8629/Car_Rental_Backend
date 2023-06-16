@@ -3,7 +3,6 @@ module Api
     class CarsController < ApplicationController
       before_action :authenticate_request!, only: %i[create update destroy]
       before_action :set_car, only: %i[update show destroy]
-
       # GET /cars
       def index
         @cars = Car.all
@@ -12,7 +11,7 @@ module Api
 
       # POST /car
       def create
-        @car = User.find(params[:user_id]).cars.new(car_params)
+        @car = current_user!.cars.create(car_params)
         if @car.save
           render json: CarRepresenter.new(@car).as_json, status: :created
         else
