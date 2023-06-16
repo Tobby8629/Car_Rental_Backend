@@ -24,7 +24,7 @@ class ApplicationController < ActionController::API
     nil
   end
 
-  #def invalid_authentication
-   # render json: { error: 'You need to login' }, status: :unauthorized
-  #end
+  def invalid_authentication
+    render json: { error: 'You need to login' }, status: :unauthorized
+  end
 end
