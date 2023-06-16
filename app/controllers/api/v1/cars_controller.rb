@@ -40,6 +40,8 @@ module Api
         head :no_content
       end
 
+      private
+
       def car_params
         params.permit(:name, :description, :photo, :price, :model, :user_id)
       end
