@@ -3,12 +3,12 @@ class AuthenticationTokenService
   ALGORITHM_TYPE = 'HS256'.freeze
 
   def self.call(user_id)
-    payload = { user_id: }
-    JWT.encode payload, HMAC_SECRET, ALGORITHM_TYPE
+    payload = { user_id: user_id }
+    JWT.encode(payload, HMAC_SECRET, ALGORITHM_TYPE)
   end
 
   def self.decode(token)
-    JWT.decode token, HMAC_SECRET, true, { algorithm: ALGORITHM_TYPE }
+    JWT.decode(token, HMAC_SECRET, true, { algorithm: ALGORITHM_TYPE })
   rescue JWT::DecodeError
     false
   end
@@ -18,6 +18,6 @@ class AuthenticationTokenService
   end
 
   def self.expired_token
-    render json: { error: 'Invalid or missing token! Please login again' }, status: :unauthorized
+    { error: 'Invalid or missing token! Please login again' }
   end
 end
