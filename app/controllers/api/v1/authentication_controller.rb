@@ -8,7 +8,7 @@ module Api
 
       def create
         if user
-          render json: UserRepresenter.new(user).as_json, status: :ok
+          render json: UserRepresenter.new(user).as_json, status: :created
         else
           render json: { error: 'No such user; check the submitted username' }, status: :unauthorized
         end
