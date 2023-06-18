@@ -11,14 +11,24 @@ module Api
 
       # POST /reservations
       def create
-        @User = User.find(params[:user_id])
-        @reservation = @User.reservations.new(reservation_params)
+        @user = User.find(params[:user_id])
+        @car = Car.find_by(name: params[:car])
+      
+        if @car.nil?
+          render json: { error: "Car not found" }, status: :not_found
+          return
+        end
+      
+        @reservation = @user.reservations.new(reservation_params)
+        @reservation.car = @car
+      
         if @reservation.save
           render json: ReservationRepresenter.new(@reservation).as_json, status: :created
         else
           render json: @reservation.errors, status: :unprocessable_entity
         end
       end
+      
       # GET /reservations/:id
       def show
         render json: ReservationRepresenter.new(@reservation).as_json
