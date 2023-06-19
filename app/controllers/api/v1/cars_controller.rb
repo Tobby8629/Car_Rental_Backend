@@ -14,7 +14,7 @@ module Api
             photo: rails_blob_url(car.photo),
             price: car.price,
             model: car.model,
-            user_id: car.user_id,
+            #user_id: car.user_id,
             username: car.user.username
           }
         end
