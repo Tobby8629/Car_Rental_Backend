@@ -1,19 +1,24 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+
+  # Defines the root path route ("/")
+  # root "articles#index"
+  root 'home#index'
   namespace :api do
     namespace :v1 do
-      post "/login", to: "users#login"
-      resources :cars, only: [:index, :create, :destroy, :show] do
-        member do
-          delete :delete
-        end
+      resources :users, only: %i[index create destroy]
+      resources :cars, only: %i[index create show update destroy] do
         collection do
-          get :user_cars
-        end
+         get 'cars'
+        end 
       end
-
-      resources :users, only: [:create] do
-        resources :reservations, only: %i[index create show update destroy]
-      end
+      resources :reservations, only: %i[index create show update destroy]
+      post 'login', to: 'authentication#create'
+      post 'register', to: 'users#create'
     end
   end
 end

@@ -1,16 +1,16 @@
 class ApplicationController < ActionController::API
-  include Api::V1
   include Response
   include ExceptionHandler
-  include JsonWebToken
-  before_action :authenticate_request
 
-  private
+  # def payload
+  #   auth_header = request.headers['Authorization']
+  # token = auth_header.split.last
+  # AuthenticationTokenService.decode(token)
+  # rescue StandardError
+  #  nil
+  # end
 
-  def authenticate_request
-    header = request.headers['Authorization']
-    header = header.split.last if header
-    decoded = jwt_decode(header)
-    @current_user = User.find(decoded[:user_id])
-  end
+  # def invalid_authentication
+  # render json: { error: 'You need to login' }, status: :unauthorized
+  # end
 end
