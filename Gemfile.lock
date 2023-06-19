@@ -86,6 +86,10 @@ GEM
       irb (>= 1.5.0)
       reline (>= 0.3.1)
     diff-lcs (1.5.0)
+    dotenv (2.8.1)
+    dotenv-rails (2.8.1)
+      dotenv (= 2.8.1)
+      railties (>= 3.2)
     erubi (1.12.0)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
@@ -94,7 +98,6 @@ GEM
       railties (>= 5.0.0)
     faker (3.2.0)
       i18n (>= 1.8.11, < 2)
-    ffi (1.15.5)
     globalid (1.1.0)
       activesupport (>= 5.0)
     i18n (1.14.1)
@@ -225,8 +228,6 @@ GEM
     rubocop-ast (1.29.0)
       parser (>= 3.2.1.0)
     ruby-progressbar (1.13.0)
-    sassc (2.4.0)
-      ffi (~> 1.9)
     shoulda-matchers (4.5.1)
       activesupport (>= 4.2.0)
     sprockets (4.2.0)
@@ -253,10 +254,12 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  activestorage
   bcrypt (~> 3.1.7)
   bootsnap
   database_cleaner
   debug
+  dotenv-rails
   factory_bot_rails (~> 6.1)
   faker
   jwt
@@ -267,13 +270,12 @@ DEPENDENCIES
   rspec-rails
   rswag
   rubocop (>= 1.0, < 2.0)
-  sassc
   shoulda-matchers (~> 4.5, >= 4.5.1)
   sprockets-rails
   tzinfo-data
 
 RUBY VERSION
-   ruby 3.2.2p53
+   ruby 3.2.1p31
 
 BUNDLED WITH
    2.4.12

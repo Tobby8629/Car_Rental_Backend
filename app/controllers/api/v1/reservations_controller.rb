@@ -6,22 +6,24 @@ module Api
       # GET /reservations
       def index
         @reservations = Reservation.all
-        render json: ReservationsRepresenter.new(@reservations).as_json
+        @reservation_data = @reservations.map do |reservation|
+          {
+            image: rails_blob_url(reservation.car.photo),
+            id: reservation.id,
+            city: reservation.city,
+            pick_up: reservation.pick_up,
+            return_date: reservation.return_date,
+            car: Car.find(reservation.car_id).name
+          }
+        end
+        render json: @reservation_data
+        # render json: ReservationsRepresenter.new(@reservations).as_json
       end
 
       # POST /reservations
       def create
-        @user = User.find(params[:user_id])
-        @car = Car.find_by(name: params[:car])
-
-        if @car.nil?
-          render json: { error: 'Car not found' }, status: :not_found
-          return
-        end
-
+        @user = User.find(params[:reservation][:user_id])
         @reservation = @user.reservations.new(reservation_params)
-        @reservation.car = @car
-
         if @reservation.save
           render json: ReservationRepresenter.new(@reservation).as_json, status: :created
         else
@@ -53,7 +55,7 @@ module Api
       private
 
       def reservation_params
-        params.require(:reservation).permit(:city, :pick_up, :return_date, :car_id)
+        params.require(:reservation).permit(:city, :pick_up, :return_date, :car_id, :user_id)
       end
 
       def set_reservation
