@@ -8,10 +8,11 @@ class CarRepresenter
       id: car.id,
       name: car.name,
       description: car.description,
-      # photo: car.photo,
+      photo: rails_blob_url(car.photo),
       price: car.price,
       model: car.model,
-      date_added: car.created_at
+      user_id: car.user_id,
+      username: car.user.username
     }
   end
 

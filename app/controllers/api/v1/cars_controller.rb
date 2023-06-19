@@ -18,9 +18,9 @@ module Api
             username: car.user.username
           }
         end
-        render json: @car_data
+        #render json: @car_data
 
-        # render json: CarsRepresenter.new(@cars).as_json
+        render json: CarsRepresenter.new(@car_data).as_json
       end
 
       # POST /car
