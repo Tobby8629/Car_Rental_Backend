@@ -6,16 +6,46 @@ module Api
       # GET /cars
       def index
         @cars = Car.all
-        render json: CarsRepresenter.new(@cars).as_json
+        @car_data = @cars.map do |car|
+          {
+            id: car.id,
+            name: car.name,
+            description: car.description,
+            photo: rails_blob_url(car.photo),
+            price: car.price,
+            model: car.model,
+            user_id: car.user_id,
+            username: car.user.username
+          }
+        end
+        render json: @car_data
+        
+        # render json: CarsRepresenter.new(@cars).as_json
       end
      
-    
+     def cars
+      @cars = Car.where(user_id: params[:id])
+      @car_data = @cars.map do |car|
+        {
+          id: car.id,
+          name: car.name,
+          description: car.description,
+          photo: rails_blob_url(car.photo),
+          price: car.price,
+          model: car.model,
+          user_id: car.user_id,
+          username: car.user.username
+        }
+      end
+      render json: @car_data
+     end
 
 
       # POST /car
       def create
-        @User = User.find(params[:user_id])
+        @User = User.find(params[:car][:user_id])
         @car = @User.cars.create(car_params)
+        @car.photo.attach(params[:car][:photo]) if params[:car][:photo]
         if @car.save
           render json: CarRepresenter.new(@car).as_json, status: :created
         else
@@ -25,7 +55,19 @@ module Api
 
       # GET /cars/:id
       def show
-        render json: CarRepresenter.new(@car).as_json
+        @car = Car.find(params[:id])
+        @cardata = {
+            id: @car.id,
+            name: @car.name,
+            description: @car.description,
+            photo: rails_blob_url(@car.photo),
+            price: @car.price,
+            model: @car.model,
+            user_id: @car.user_id,
+            username: @car.user.username
+          }
+        render json: @cardata
+        # render json: CarRepresenter.new(@car).as_json
       end
 
       # PUT /cars/:id
@@ -47,7 +89,7 @@ module Api
       private
 
       def car_params
-        params.permit(:name, :description, :photo, :price, :model)
+        params.require(:car).permit(:name, :description, :price, :model, :user_id, :photo)
       end
 
       def set_car
