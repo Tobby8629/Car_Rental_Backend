@@ -7,7 +7,7 @@ RSpec.describe 'Authentications', type: :request do
     it 'authenticates the user' do
       post '/api/v1/login', params: { username: user.username }
 
-      expect(response).to have_http_status(:ok)
+      expect(response).to have_http_status(:created)
     end
 
     it 'returns error when username does not exist' do

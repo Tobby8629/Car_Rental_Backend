@@ -19,17 +19,14 @@ module Api
           }
         end
         render json: @car_data
-        
+
         # render json: CarsRepresenter.new(@cars).as_json
       end
-     
-    
-
 
       # POST /car
       def create
-        @User = User.find(params[:car][:user_id])
-        @car = @User.cars.create(car_params)
+        @user = User.find(params[:car][:user_id])
+        @car = @user.cars.create(car_params)
         @car.photo.attach(params[:car][:photo]) if params[:car][:photo]
         if @car.save
           render json: CarRepresenter.new(@car).as_json, status: :created
@@ -42,15 +39,15 @@ module Api
       def show
         @car = Car.find(params[:id])
         @cardata = {
-            id: @car.id,
-            name: @car.name,
-            description: @car.description,
-            photo: rails_blob_url(@car.photo),
-            price: @car.price,
-            model: @car.model,
-            user_id: @car.user_id,
-            username: @car.user.username
-          }
+          id: @car.id,
+          name: @car.name,
+          description: @car.description,
+          photo: rails_blob_url(@car.photo),
+          price: @car.price,
+          model: @car.model,
+          user_id: @car.user_id,
+          username: @car.user.username
+        }
         render json: @cardata
         # render json: CarRepresenter.new(@car).as_json
       end
