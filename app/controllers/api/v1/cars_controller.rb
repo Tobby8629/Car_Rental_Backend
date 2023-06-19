@@ -1,7 +1,7 @@
 module Api
   module V1
     class CarsController < ApplicationController
-      #before_action :authenticate_request!, only: %i[create update destroy]
+      # before_action :authenticate_request!, only: %i[create update destroy]
       before_action :set_car, only: %i[update show destroy]
       # GET /cars
       def index
@@ -23,22 +23,7 @@ module Api
         # render json: CarsRepresenter.new(@cars).as_json
       end
      
-     def cars
-      @cars = Car.where(user_id: params[:id])
-      @car_data = @cars.map do |car|
-        {
-          id: car.id,
-          name: car.name,
-          description: car.description,
-          photo: rails_blob_url(car.photo),
-          price: car.price,
-          model: car.model,
-          user_id: car.user_id,
-          username: car.user.username
-        }
-      end
-      render json: @car_data
-     end
+    
 
 
       # POST /car
