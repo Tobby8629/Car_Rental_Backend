@@ -1,8 +1,8 @@
 module Api
   module V1
     class ReservationsController < ApplicationController
+      # before_action :authenticate_request!, only: %i[create update destroy]
       before_action :set_reservation, only: %i[update show destroy]
-
       # GET /reservations
       def index
         @reservations = Reservation.all
@@ -11,7 +11,17 @@ module Api
 
       # POST /reservations
       def create
-        @reservation = @current_user.reservations.new(reservation_params)
+        @user = User.find(params[:user_id])
+        @car = Car.find_by(name: params[:car])
+
+        if @car.nil?
+          render json: { error: 'Car not found' }, status: :not_found
+          return
+        end
+
+        @reservation = @user.reservations.new(reservation_params)
+        @reservation.car = @car
+
         if @reservation.save
           render json: ReservationRepresenter.new(@reservation).as_json, status: :created
         else

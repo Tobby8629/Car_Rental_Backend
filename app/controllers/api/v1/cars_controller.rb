@@ -1,50 +1,55 @@
-class Api::V1::CarsController < ApplicationController
-  def index
-    @cars = Car.all
-    render json: CarsRepresenter.new(@cars).as_json, status: :ok
-  end
+module Api
+  module V1
+    class CarsController < ApplicationController
+      # before_action :authenticate_request!, only: %i[create update destroy]
+      before_action :set_car, only: %i[update show destroy]
+      # GET /cars
+      def index
+        @cars = Car.all
+        render json: CarsRepresenter.new(@cars).as_json
+      end
 
-  def show
-    @car = Car.find(params[:id])
-    render json: CarRepresenter.new(@car).as_json, status: :ok
-  end
+      # POST /car
+      def create
+        @user = User.find(params[:user_id])
+        @car = @user.cars.create(car_params)
+        if @car.save
+          render json: CarRepresenter.new(@car).as_json, status: :created
+        else
+          render json: @car.errors, status: :unprocessable_entity
+        end
+      end
 
-  def create
-    @car = Car.new(car_params.merge(user: @current_user))
-    if @car.save
-      render json: CarRepresenter.new(@car).as_json, status: :created
-    else
-      render json: { error: 'There was an error, please try again!' }, status: :internal_server_error
+      # GET /cars/:id
+      def show
+        render json: CarRepresenter.new(@car).as_json
+      end
+
+      # PUT /cars/:id
+      def update
+        @car.update(car_params)
+        if @car.save
+          render json: CarRepresenter.new(@car).as_json, status: :created
+        else
+          render json: @car.errors, status: :unprocessable_entity
+        end
+      end
+
+      # DELETE /cars/:id
+      def destroy
+        @car.destroy
+        head :no_content
+      end
+
+      private
+
+      def car_params
+        params.permit(:name, :description, :photo, :price, :model)
+      end
+
+      def set_car
+        @car = Car.find(params[:id])
+      end
     end
-  end
-
-  # PUT /cars/:id
-  def update
-    @car.update(car_params)
-    if @car.save
-      render json: CarRepresenter.new(@car).as_json, status: :created
-    else
-      render json: @car.errors, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    @car = Car.find(params[:id])
-    if @car.destroy!
-      render json: { success: 'The car has been deleted successfully' }, status: :ok
-    else
-      render json: { error: 'There was an error, please try again!' }, status: :internal_server_error
-    end
-  end
-
-  def user_cars
-    @cars = User.find(params[:user_id]).cars
-    render json: { cars: @cars }, status: :ok
-  end
-
-  private
-
-  def car_params
-    params.require(:car).permit(:name, :description, :photo, :price, :model)
   end
 end
