@@ -14,13 +14,13 @@ module Api
             photo: rails_blob_url(car.photo),
             price: car.price,
             model: car.model,
-            #user_id: car.user_id,
-            username: car.user.username
+            user_id: car.user_id,
+            username: car.user&.username # Check if car.user is present before accessing username
           }
         end
-        #render json: @car_data
+        render json: @car_data
 
-        render json: CarsRepresenter.new(@car_data).as_json
+        #render json: CarsRepresenter.new(@car_data).as_json
       end
 
       # POST /car
