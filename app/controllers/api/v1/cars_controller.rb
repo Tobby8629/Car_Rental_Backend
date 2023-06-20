@@ -5,9 +5,9 @@ module Api
       before_action :set_car, only: %i[update show destroy]
       # GET /cars
       def index
+        @cars = Car.all
         response.headers['Cache-Control'] = 'public, max-age=3600'
         fresh_when(@cars, public: true)
-        @cars = Car.all
         @car_data = @cars.map do |car|
           {
             id: car.id,
