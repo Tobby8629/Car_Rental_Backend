@@ -6,8 +6,6 @@ module Api
       # GET /reservations
       def index
         @reservations = Reservation.all
-        response.headers['Cache-Control'] = 'public, max-age=3600'
-        fresh_when(@reservations, public: true)
         @reservation_data = @reservations.map do |reservation|
           {
             image: rails_blob_url(reservation.car.photo),

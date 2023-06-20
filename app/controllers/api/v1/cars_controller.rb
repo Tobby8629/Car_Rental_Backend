@@ -6,8 +6,6 @@ module Api
       # GET /cars
       def index
         @cars = Car.all
-        response.headers['Cache-Control'] = 'public, max-age=3600'
-        fresh_when(@cars, public: true)
         @car_data = @cars.map do |car|
           {
             id: car.id,
@@ -27,8 +25,6 @@ module Api
 
       def cars
         @cars = Car.where(user_id: params[:id])
-        response.headers['Cache-Control'] = 'public, max-age=3600'
-        fresh_when(@cars, public: true)
         @car_data = @cars.map do |car|
           {
             id: car.id,
@@ -61,8 +57,6 @@ module Api
       # GET /cars/:id
       def show
         @car = Car.find(params[:id])
-        response.headers['Cache-Control'] = 'public, max-age=3600'
-        fresh_when(@car, public: true)
         @cardata = {
           id: @car.id,
           name: @car.name,
