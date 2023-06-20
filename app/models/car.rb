@@ -7,5 +7,4 @@ class Car < ApplicationRecord
   validates :model, presence: true
   validates :price, presence: true
   validates :description, presence: true
-  # validates :photo, presence: true
 end
